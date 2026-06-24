@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/check_grounding.py\"",
+            "statusMessage": "주춧돌 가정 검증 중..."
+          }
+        ]
+      }
+    ]
+  }
+}

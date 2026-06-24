@@ -1,0 +1,18 @@
+{
+  "name": "plan-guard-local",
+  "owner": {
+    "name": "bykim0119"
+  },
+  "metadata": {
+    "description": "로컬 plan-guard 마켓플레이스 (개발/사용용)",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "plan-guard",
+      "source": "./",
+      "description": "계획의 검증 안 된 주춧돌 가정을 막고, 계획 구조를 Mermaid 지도로 보여주는 플러그인",
+      "version": "0.1.0"
+    }
+  ]
+}

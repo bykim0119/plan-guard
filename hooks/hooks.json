@@ -10,6 +10,16 @@
             "statusMessage": "주춧돌 가정 검증 중..."
           }
         ]
+      },
+      {
+        "matcher": "TaskCreate|TaskUpdate",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/track_position.py\"",
+            "statusMessage": "계획 진행 위치 갱신 중..."
+          }
+        ]
       }
     ]
   }

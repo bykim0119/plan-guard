@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+.plan-guard-position.json
+docs/superpowers/

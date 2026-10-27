@@ -51,6 +51,13 @@ class TestApplyEvent(unittest.TestCase):
         np = tp.apply_event(np, {"kind": "update", "id": "1", "status": "completed"})
         self.assertEqual(np["items"][0]["status"], "completed")
 
+    def test_update_deleted_removes_item(self):
+        np = {"last_kind": "create",
+              "items": [{"id": "1", "subject": "A", "status": "pending"},
+                        {"id": "2", "subject": "B", "status": "pending"}]}
+        np = tp.apply_event(np, {"kind": "update", "id": "1", "status": "deleted"})
+        self.assertEqual([it["id"] for it in np["items"]], ["2"])
+
     def test_create_after_update_resets_batch(self):
         np = {"last_kind": "update",
               "items": [{"id": "1", "subject": "old", "status": "completed"}]}

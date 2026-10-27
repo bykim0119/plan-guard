@@ -7,6 +7,7 @@ PostToolUse(Write|Edit) 훅. specs/ 하위 .md를 저장하면 「설계 결정�
 채워졌는지 검사한다. 위반이면 exit 2 + stderr로 Claude에게 피드백한다.
 """
 import json
+import os
 import re
 import sys
 
@@ -24,6 +25,10 @@ BOXES = [
 
 TAG = re.compile(r"\[(확인|검증|미정)(?::[ \t]*([^\]]*))?\]")
 NA = re.compile(r"\bN/A\s*:\s*(\S)")
+TAG_HELP = (
+    "꼬리표 형식: 결정 줄 끝에 [확인] / [검증: 근거] / [미정: 이유] 중 하나.\n"
+    "  예: - DB = Qdrant [검증: 공식 문서 확인]"
+)
 
 
 def is_target(path):
@@ -128,10 +133,13 @@ def check_text(text):
         )
     errors = check_section(section)
     if errors:
-        return False, (
+        msg = (
             "plan-guard: 설계 결정 체크리스트 위반으로 저장을 막았습니다.\n"
             + "\n".join("  - " + e for e in errors)
         )
+        if any("꼬리표가 없습니다" in e for e in errors):
+            msg += "\n" + TAG_HELP
+        return False, msg
     return True, ""
 
 
@@ -155,7 +163,8 @@ def main():
     path = (data.get("tool_input") or {}).get("file_path") or ""
     ok, msg = check_file(path)
     if not ok:
-        print(msg, file=sys.stderr)
+        # 설치 사본과 헷갈리지 않게 실제 실행된 스크립트 경로를 밝힌다
+        print(f"{msg}\n(검사 스크립트: {os.path.abspath(__file__)})", file=sys.stderr)
         sys.exit(2)
     sys.exit(0)
 

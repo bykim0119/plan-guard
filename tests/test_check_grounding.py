@@ -68,6 +68,15 @@ class TestTags(unittest.TestCase):
         ok, msg = cg.check_text(section(scope="- 만들 것: X"))
         self.assertFalse(ok)
 
+    def test_missing_tag_message_shows_format(self):
+        ok, msg = cg.check_text(section(scope="- 만들 것: X"))
+        self.assertIn("[검증: 근거]", msg)
+        self.assertIn("예:", msg)
+
+    def test_other_errors_skip_format_help(self):
+        ok, msg = cg.check_text(section(scope=""))
+        self.assertNotIn("예:", msg)
+
     def test_verify_without_reason_blocks(self):
         ok, msg = cg.check_text(section(corner="- DB = Qdrant [검증:]"))
         self.assertFalse(ok)

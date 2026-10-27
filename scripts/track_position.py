@@ -50,6 +50,8 @@ def apply_event(notepad, event):
             items.append({"id": event["id"],
                           "subject": event.get("subject", ""),
                           "status": "pending"})
+    elif kind == "update" and event.get("status") == "deleted":
+        items = [it for it in items if it["id"] != event["id"]]
     elif kind == "update":
         for it in items:
             if it["id"] == event["id"]:
